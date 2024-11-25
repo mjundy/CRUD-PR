@@ -10,10 +10,10 @@ class StatusPR(models.Model):
 
 class PR(models.Model): 
     tgl_pr = models.DateField()
-    partnumber = models.CharField(max_length=255, null=True, unique=False)
+    partnumber = models.CharField(max_length=255, blank=True, unique=False)
     partname = models.CharField(max_length=255)
     qty = models.IntegerField()
-    deskripsi = models.CharField(max_length=255, null=True)
+    deskripsi = models.CharField(max_length=255, blank=True)
     status = models.ForeignKey(StatusPR, on_delete=models.CASCADE)
     #status = models.CharField(max_length=255, null=True, blank=True)
     #delete = models.CharField(max_length=255, default=False)
