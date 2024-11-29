@@ -6,10 +6,28 @@ from django.urls import reverse_lazy
 from django.views.generic import TemplateView, CreateView, ListView, UpdateView, DeleteView, View
 from .models import PR, StatusPR
 from .forms import PRForm, StatusPRForm
+from django.utils.timezone import now
+
 class ListPR(ListView):
     template_name = 'crud_pr/tables.html'
     model = PR
     context_object_name = "list_pr"
+
+    def get_context_data(self, **kwargs):
+        # Memanggil context default dari superclass
+        context = super().get_context_data(**kwargs)
+        for item in context['list_pr']:
+            if item.tgl_pr:
+                # Menghitung durasi dalam hari
+                item.durasi = (now().date() - item.tgl_pr).days
+                # Menentukan apakah expired
+                item.expired = item.durasi > 30
+            else:
+                # Set nilai default jika tgl_pr tidak ada
+                item.durasi = None
+                item.expired = False
+        return context
+        
 
 class RegisterPR(CreateView):
     template_name = 'crud_pr/register.html'
