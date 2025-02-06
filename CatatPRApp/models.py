@@ -10,21 +10,15 @@ class StatusPR(models.Model):
 
 
 class PR(models.Model): 
-    tgl_pr = models.DateField()
+    tgl_pr = models.DateField(null=False, blank=False)
     partnumber = models.CharField(max_length=255, blank=True, unique=False)
-    partname = models.CharField(max_length=255)
+    partname = models.CharField(max_length=100)
     qty = models.IntegerField()
-    deskripsi = models.CharField(max_length=255, blank=True)
+    deskripsi = models.CharField(max_length=100, blank=True)
     status = models.ForeignKey(StatusPR, on_delete=models.CASCADE)
-    #status = models.CharField(max_length=255, null=True, blank=True)
-    #delete = models.CharField(max_length=255, default=False)
-
-
-    def durasi(self):
-        """
-        Menghitung durasi dalam hari antara tgl_pr dan waktu saat ini.
-        """
-        if self.tgl_pr:
-            delta = now().date() - self.tgl_pr
-            return delta.days
-        return None
+    tgl_terima = models.DateField(null=True, blank=True, unique=False)
+    tgl_sent_to_purchase = models.DateField(null=True, blank=True)
+    durasi = models.DateField(null=True, blank=True)
+    
+    class Meta:
+        ordering = ['-tgl_pr']
